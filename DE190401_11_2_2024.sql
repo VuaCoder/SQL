@@ -1,24 +1,24 @@
 ﻿CREATE DATABASE FUH_company1
-use FUH_company1 -- dung de thay doi database (mac dinh la master)
+use FUH_company1
 create table tblDepartment
 (
 depNum int primary key,
-depName nvarchar(50) not null, -- cac truong cach nhau bang dau phay
+depName nvarchar(50) not null, 
 mgrSSN varchar(11), 
-mgrAssDate date -- truong cuoi ko can dau phay
+mgrAssDate date 
 )
 create table tblEmployee
 (
-empSSN varchar(11) primary key, -- primary key dung de dat truong lam khoa chinh( o day la ma nhan vien)
+empSSN varchar(11) primary key, 
 empName nvarchar(30) not null,
-empAddress nvarchar(50) default N'Đà Nẵng',-- N dung de dat chu co tieng Viet, dat 'ten'( ko dau hoac co dau, thuong la co dau)
+empAddress nvarchar(50) default N'Đà Nẵng',
 empSalary numeric(9, 0),
 empSex char(1),
 empBoD date,
-depNum int, -- truong ngoai( truong ma 2 bang deu co) deu phai cung kieu du lieu
+depNum int, 
 suppervisorSSN varchar(11),
 empStartDate date
-constraint fk_emp foreign key(depNum) references tblDepartment(depNum) -- mang phong ban tu nhan vien phai lay tu department
+constraint fk_emp foreign key(depNum) references tblDepartment(depNum) 
 )
 
 create table tblDependent
@@ -27,8 +27,8 @@ depName nvarchar(30),
 empSSN varchar(11),
 depSex char(1),
 depBoD date,
-depRelationship nvarchar(10) -- truong cuoi
-constraint pk_dep primary key(depName, empSSN), -- khoa chinh co 2 truong chinh thi phai dat cuoi hang
+depRelationship nvarchar(10) 
+constraint pk_dep primary key(depName, empSSN), 
 constraint fk_dep foreign key(empSSN) references tblEmployee(empSSN)
 )
 
