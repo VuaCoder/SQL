@@ -65,11 +65,9 @@ values(2, N'Phòng phần mềm nước ngoài','30121050142','2005-01-06')
 insert into tblDepartment
 values(3, N'Giải pháp mạng truyền thông','30121050254','2000-01-01')
 insert into tblDepartment
-values(4, N'Phòng phần mềm trong nước','30121050037','2003-01-10')
+values(4, N'Phòng dịch vụ chăm sóc khách hàng','30121050037','2003-01-10')
 insert into tblDepartment
-values(5, N'Phòng phần mềm trong nước','30121050037','2003-01-10')
-insert into tblDepartment
-values(6, N'Phòng phần mềm trong nước','30121050037','2003-01-10')
+values(5, N'Phòng Nghiên cứu và phát triển','30121050037','2003-01-10')
 insert into tblLocation
 values(1,N'TP Hà Nội')
 insert into tblLocation
