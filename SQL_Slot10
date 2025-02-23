@@ -1,0 +1,252 @@
+-- Cau 2
+select proNum as 'Mã dự án', proName as [Tên dự án], depName [Tên dự án]
+from tblDepartment d,tblProject p 
+where d.depNum = p.depNum and
+depName = N'Phòng phần mềm trong nước'
+-- Cau 1
+select empSSN, empName, d.depNum, depName 
+from tblDepartment d, tblEmployee e
+where d.mgrSSN =e.empSSN and depName = N'Phòng phần mềm trong nước'
+-- Cau 3
+select p.depNum,p.proName,d.depName
+from  tblDepartment d inner join tblProject p on p.depNum = d.depNum
+where p.proName = N'ProjectB' 
+-- Cau 4
+select e2.empSSN, e2.empName 
+from tblEmployee e1 inner join tblEmployee e2 on e2.suppervisorSSN = e1.empSSN 
+where e1.empName = N'Mai Duy An'
+-- Cau 5 
+select e1.suppervisorSSN, e2.empName
+from tblEmployee e1 join tblEmployee e2 on e1.suppervisorSSN = e2.empSSN
+where e1.empName = N'Mai Duy An'
+-- Cau 6
+select p.locNum, l.locName
+from tblProject p join tblLocation l on p.locNum = l.locNum
+where p.proName = 'ProjectA'
+-- Cau 7
+select l.locNum,p.proName
+from tblLocation l join tblProject p on l.locNum = p.locNum 
+where l.locName = N'TP Hồ Chí Minh'
+-- Cau 8
+select d.depName,d.depBoD,e.empName
+from tblDependent d join tblEmployee e on d.empSSN = e.empSSN
+where year(getDate()) - year(d.depBoD) > 18
+-- Cau 9
+select d.depName,d.depBoD,e.empName
+from tblDependent d join tblEmployee e on d.empSSN = e.empSSN
+where d.depSex ='M'
+-- Cau 10
+select d.depNum, d.depName, l.locName
+from tblDepartment d, tblLocation l, DepLocation dL
+where d.depName = N'Phòng Nghiên cứu và phát triển' and d.depNum = dL.depNum and dL.locNum = l.locNum
+-- Cau 11
+select p.proNum, p.proName,d.depName
+from tblProject p join tblLocation l on p.locNum = l.locNum join tblDepartment d on d.depNum = p.depNum
+where l.locName = N'TP Hồ Chí Minh'
+-- Cau 12
+select e.empName, d.depName, d.depRelationship
+from tblDependent d join tblEmployee e on d.empSSN = e.empSSN join tblDepartment d1 on e.depNum = d1.depNum
+where d.depSex = 'F' and d1.depName = N'Phòng nghiên cứu và phát triển'
+-- Cau 13
+select e.empName, d.depName, d.depRelationship
+from tblDependent d join tblEmployee e on d.empSSN = e.empSSN join tblDepartment d1 on e.depNum = d1.depNum
+where year(GETDATE()) - year(d.depBoD) > 18 and d1.depName = N'Phòng nghiên cứu và phát triển'
+-- Cau 14 
+select depSex,count(depName) as SLNPT 
+from tblDependent
+group by depSex
+-- Cau 15
+select depRelationship,count(depName) as [SLNPT]
+from tblDependent 
+group by depRelationship
+-- Cau 16
+select distinct d1.depNum,d1.depName,count(d.depName) as [SLNPT]
+from tblDependent d join tblEmployee e on d.empSSN = e.empSSN join tblDepartment d1 on e.depNum = d1.depNum
+group by d1.depNum,d1.depName
+-- Cau 17
+select top 1 d1.depNum,d1.depName,count(d.depName) as [SLNPT]
+from tblDependent d join tblEmployee e on d.empSSN = e.empSSN join tblDepartment d1 on e.depNum = d1.depNum
+group by d1.depNum,d1.depName
+order by count(d.empSSN)
+-- Cau 18
+select top 1 with ties d1.depNum,d1.depName,count(d.depName) as [SLNPT]
+from tblDependent d join tblEmployee e on d.empSSN = e.empSSN join tblDepartment d1 on e.depNum = d1.depNum
+group by d1.depNum,d1.depName
+order by count(d.empSSN) desc
+-- Cau 19
+select e.empSSN, e.empName, d.depName, sum(w.workHours) as [Tổng số giờ làm]
+from tblDepartment d join tblProject p on d.depNum = p.depNum  join tblWorksOn w on w.proNum = p.proNum join tblEmployee e on w.empSSN = e.empSSN
+group by e.empSSN, e.empName, d.depName
+-- Cau 20
+select d.depNum, d.depName, sum(w.workHours) as [Tổng số giờ làm] 
+from tblDepartment d join tblProject p on d.depNum = p.depNum  join tblWorksOn w on w.proNum = p.proNum
+group by d.depNum, d.depName
+-- Cau 21
+select top 1 with ties e.empSSN, e.empName,  sum(w.workHours) as [Tổng số giờ làm]
+from tblDepartment d join tblProject p on d.depNum = p.depNum  join tblWorksOn w on w.proNum = p.proNum join tblEmployee e on w.empSSN = e.empSSN
+group by e.empSSN, e.empName
+order by sum(w.workHours)
+-- Cau 22
+select top 1 with ties e.empSSN, e.empName,  sum(w.workHours) as [Tổng số giờ làm]
+from tblDepartment d join tblProject p on d.depNum = p.depNum  join tblWorksOn w on w.proNum = p.proNum join tblEmployee e on w.empSSN = e.empSSN
+group by e.empSSN, e.empName
+order by sum(w.workHours) desc
+-- Cau 23
+select e.empSSN, e.empName, d.depName,count(w.workHours) as [Tham dự]
+from tblDepartment d join tblProject p on d.depNum = p.depNum  join tblWorksOn w on w.proNum = p.proNum join tblEmployee e on w.empSSN = e.empSSN
+group by e.empSSN, e.empName,d.depName
+having count(w.workHours) = 1
+-- Cau 24
+select e.empSSN, e.empName, d.depName,count(w.workHours) as [Tham dự]
+from tblDepartment d join tblProject p on d.depNum = p.depNum  join tblWorksOn w on w.proNum = p.proNum join tblEmployee e on w.empSSN = e.empSSN
+group by e.empSSN, e.empName,d.depName
+having count(w.workHours) = 2
+-- Cau 25
+select e.empSSN, e.empName, d.depName,count(w.workHours) as [Tham dự]
+from tblDepartment d join tblProject p on d.depNum = p.depNum  join tblWorksOn w on w.proNum = p.proNum join tblEmployee e on w.empSSN = e.empSSN
+group by e.empSSN, e.empName,d.depName
+having count(w.workHours) >= 2
+-- Cau 26
+select p.proNum,p.proName, count(w.empSSN) as [Tổng số thành viên]
+from tblProject p join tblWorksOn w on w.proNum = p.proNum
+group by p.proNum,p.proName
+-- Cau 27
+select p.proNum,p.proName, sum(w.workHours) as [Tổng số giờ làm]
+from tblProject p join tblWorksOn w on w.proNum = p.proNum
+group by p.proNum,p.proName
+-- Cau 28
+select top 1 with ties p.proNum,p.proName, count(w.empSSN) as [Tổng số thành viên]
+from tblProject p join tblWorksOn w on w.proNum = p.proNum
+group by p.proNum,p.proName
+order by count(w.empSSN)
+-- Cau 29
+select top 1 with ties p.proNum,p.proName, count(w.empSSN) as [Tổng số thành viên]
+from tblProject p join tblWorksOn w on w.proNum = p.proNum
+group by p.proNum,p.proName
+order by count(w.empSSN) desc
+-- Cau 30
+select top 1 p.proNum,p.proName, sum(w.workHours) as [Tổng số giờ làm]
+from tblProject p join tblWorksOn w on w.proNum = p.proNum
+group by p.proNum,p.proName
+order by sum(w.workHours)
+-- Cau 31
+select top 1 p.proNum,p.proName, sum(w.workHours) as [Tổng số giờ làm]
+from tblProject p join tblWorksOn w on w.proNum = p.proNum
+group by p.proNum,p.proName
+order by sum(w.workHours) desc
+-- Cau 32
+select t.locName, count(t.locNum) as [Số lượng phòng ban]
+from tblLocation t join DepLocation l on t.locNum = l.locNum
+group by t.locName
+-- Cau 33
+select d.depNum,d.depName, count(l.depNum) as [Số lượng chỗ làm việc]
+from tblLocation t join DepLocation l on t.locNum = l.locNum join tblDepartment d on d.depNum = l.depNum
+group by d.depNum,d.depName
+-- Cau 34
+select top 1 t.locName, count(t.locNum) as [Số lượng phòng ban]
+from tblLocation t join DepLocation l on t.locNum = l.locNum
+group by t.locName
+order by count(t.locNum) desc
+-- Cau 35
+select top 1 with ties t.locName, count(t.locNum) as [Số lượng phòng ban]
+from tblLocation t join DepLocation l on t.locNum = l.locNum
+group by t.locName
+order by count(t.locNum) 
+-- Cau 36
+select top 1 d.depNum,d.depName, count(l.depNum) as [Số lượng chỗ làm việc]
+from tblLocation t join DepLocation l on t.locNum = l.locNum join tblDepartment d on d.depNum = l.depNum
+group by d.depNum,d.depName
+order by count(l.depNum) desc 
+-- Cau 37
+select top 1 d.depNum,d.depName, count(l.depNum) as [Số lượng chỗ làm việc]
+from tblLocation t join DepLocation l on t.locNum = l.locNum join tblDepartment d on d.depNum = l.depNum
+group by d.depNum,d.depName
+order by count(l.depNum)
+-- Cau 38 
+select e.empSSN, e.empName, count(e.empSSN) as [Số lượng người phụ thuộc]
+from tblEmployee e join tblDependent d on e.empSSN = d.empSSN 
+group by e.empSSN, e.empName
+order by count(e.empSSN) desc
+-- Cau 39
+select e.empSSN, e.empName, count(e.empSSN) as [Số lượng người phụ thuộc]
+from tblEmployee e join tblDependent d on e.empSSN = d.empSSN 
+group by e.empSSN, e.empName
+order by count(e.empSSN) asc
+-- Cau 40
+select e.empSSN, e.empName, d1.depName 
+from tblEmployee e left join tblDependent d on e.empSSN = d.empSSN join tblDepartment d1 on d1.depNum = e.depNum
+where d.empSSN is NULL
+-- Cau 41
+select d1.depNum, d1.depName 
+from tblEmployee e left join tblDependent d on e.empSSN = d.empSSN join tblDepartment d1 on d1.depNum = e.depNum
+where d.empSSN is NULL
+group by d1.depNum, d1.depName 
+-- Cau 42
+select empSSN, empName, depName
+from tblEmployee e inner join tblDepartment d
+on e.depNum = d.depNum
+except 
+select distinct e.empSSN, empName, depName 
+from tblWorksOn w inner join tblEmployee e on w.empSSN = e.empSSN 
+inner join tblDepartment d on d.depNum = e.depNum
+-- Cau 43
+select d.depName
+from tblEmployee e join tblDepartment d on e.depNum=d.depNum
+intersect(
+		select d.depName
+		from tblEmployee e join tblDepartment d on e.depNum=d.depNum
+		except(
+				select d.depName
+				from tblWorksOn wo join tblEmployee e on wo.empSSN = e.empSSN join tblDepartment d on e.depNum=d.depNum
+        )
+)
+-- Cau 44
+select  d.depName
+		from tblEmployee e inner join tblDepartment d on e.depNum=d.depNum
+		except(
+				select  d.depName
+				from tblWorksOn wo join tblEmployee e  on wo.empSSN = e.empSSN join tblDepartment d on e.depNum=d.depNum join tblProject p on wo.proNum  = p.proNum
+				where p.proName='ProjectA')
+-- Cau 45
+select d.depNum,d.depName,count(p.proNum)
+from tblDepartment d join tblProject p on d.depNum=p.depNum
+group by d.depNum,d.depName
+-- Cau 46
+select top 1 with ties d.depNum,d.depName,count(p.proNum)
+from tblDepartment d join tblProject p on d.depNum=p.depNum
+group by d.depNum,d.depName
+order by count(p.proNum) asc
+-- Cau 47
+select top 1 with ties d.depNum,d.depName,count(p.proNum)
+from tblDepartment d join tblProject p on d.depNum=p.depNum
+group by d.depNum,d.depName
+order by count(p.proNum) desc
+-- Cau 48
+select d.depNum,d.depName,p.proName,count(DISTINCT e.empSSN)
+from tblDepartment d join tblEmployee e on d.depNum=e.depNum join tblProject p on d.depNum=p.depNum
+group by d.depNum,d.depName,p.proName
+having count(e.empSSN)>5
+-- Cau 49
+select e.empSSN, e.empName
+from tblEmployee e join tblDepartment d on e.depNum=d.depNum left join tblDependent de on de.empSSN=e.empSSN
+where d.depName=N'Phòng Nghiên cứu và phát triển' and de.empSSN is null
+INSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBoD, depNum, suppervisorSSn, empStartdate) VALUES 
+('30121050219', N'Nghiêm Hoàng Phúc', N'Huế', 219000, 'M', '1968-02-17', 5, '30121050037', '2000-01-01')
+-- Cau 50
+select e.empSSN, e.empName, sum(wo.workHours)
+from tblEmployee e join tblWorksOn wo on wo.empSSN=e.empSSN left join tblDependent de on de.empSSN=e.empSSN
+where de.empSSN is null
+group by e.empSSN, e.empName
+insert into tblWorksOn(empSSN,proNum, workHours) values ('30121050265',1,2)
+-- Cau 51
+select e.empSSN, e.empName, sum(wo.workHours)
+from tblEmployee e join tblWorksOn wo on wo.empSSN=e.empSSN join tblDependent de on de.empSSN=e.empSSN
+group by e.empSSN, e.empName
+having count(de.empSSN) > 3
+INSERT INTO tblDependent (depName, empSSN, depSex, depBoD, depRelationship) VALUES
+(N'Bùi Phương Ngọc', '30121050027', 'M', '1967-03-30', N'Cháu')
+-- Cau 52
+select e.empSSN, e.empName, sum(wo.workHours)
+from tblEmployee e join tblWorksOn wo on wo.empSSN=e.empSSN join tblEmployee e2 on e.suppervisorSSn=e2.empSSN
+where e2.empName=N'Mai Duy An'
+group by e.empSSN, e.empName
